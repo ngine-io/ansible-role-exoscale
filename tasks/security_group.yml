@@ -1,0 +1,23 @@
+---
+- name: Configure security group
+  ngine_io.cloudstack.cs_securitygroup:
+    name: '{{ security_group.name }}'
+    description: '{{ security_group.description | default(omit) }}'
+    api_key: "{{ exoscale__api_key }}"
+    api_secret: "{{ exoscale__api_secret }}"
+    api_url: "{{ exoscale__api_endpoint }}"
+  run_once: true
+
+- name: Configure security group rules
+  ngine_io.cloudstack.cs_securitygroup_rule:
+    security_group: '{{ security_group.name }}'
+    start_port: '{{ item.start_port | default(item.port) }}'
+    end_port: '{{ item.end_port | default(omit) }}'
+    protocol: '{{ item.protocol | default(omit) }}'
+    cidr: '{{ item.cidr | default(omit) }}'
+    type: '{{ item.type | default(omit) }}'
+    api_key: "{{ exoscale__api_key }}"
+    api_secret: "{{ exoscale__api_secret }}"
+    api_url: "{{ exoscale__api_endpoint }}"
+  with_items: '{{ security_group.rules | default([]) }}'
+  run_once: true

@@ -1,0 +1,44 @@
+---
+exoscale__api_key:
+exoscale__api_secret:
+exoscale__api_endpoint: https://api.exoscale.ch/v1
+
+exoscale__zone: ch-dk-2
+
+exoscale__security_groups:
+  - name: default
+    rules:
+      - protocol: tcp
+        type: ingress
+        cidr: 0.0.0.0/0
+        start_port: 22
+        end_port: 22
+
+exoscale__affinity_groups: []
+exoscale__networks: []
+
+exoscale__ssh_key_default_name: "{{ lookup('env', 'USER') }}@{{ lookup('pipe', 'hostname') }}"
+exoscale__ssh_key_default_pubkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+exoscale__ssh_keys:
+  - name: "{{ exoscale__ssh_key_default_name }}"
+    pubkey: "{{ exoscale__ssh_key_default_pubkey }}"
+
+exoscale__server_name: "{{ inventory_hostname_short }}"
+
+exoscale__server_template: "Rocky Linux 8 (Green Obsidian) 64-bit 2021-08-25-13bb54"
+exoscale__server_service_offering: Small
+exoscale__server_root_disk_size: 50
+exoscale__server_networks: "{{ omit }}"
+exoscale__server_ip_to_networks: "{{ omit }}"
+exoscale__server_security_groups:
+  - default
+exoscale__server_affinity_groups: []
+exoscale__server_ssh_key: "{{ exoscale__ssh_key_default_name }}"
+exoscale__server_user_data: |
+  #cloud-config
+  manage_etc_hosts: false
+  fqdn: "{{ inventory_hostname }}"
+
+exoscale__server_state: present
+exoscale__server_allow_reboot: false

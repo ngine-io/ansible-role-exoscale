@@ -1,0 +1,77 @@
+---
+- name: Configure private networks
+  ngine_io.cloudstack.cs_network:
+    name: "{{ item.name }}"
+    start_ip: "{{ item.start_ip }}"
+    end_ip: "{{ item.end_ip }}"
+    netmask: "{{ item.netmask }}"
+    network_offering: PrivNet
+    display_text: "{{ item.display_text | default(omit) }}"
+    zone: "{{ exoscale__zone }}"
+    api_key: "{{ exoscale__api_key }}"
+    api_secret: "{{ exoscale__api_secret }}"
+    api_url: "{{ exoscale__api_endpoint }}"
+  run_once: true
+  with_items: "{{ exoscale__networks }}"
+
+- name: Configure security groups
+  include_tasks: security_group.yml
+  run_once: true
+  with_items: "{{ exoscale__security_groups }}"
+  loop_control:
+    label: "{{ security_group.name }}"
+    loop_var: security_group
+
+- name: Configure affinity groups
+  ngine_io.cloudstack.cs_affinitygroup:
+    name: '{{ affinity_group.name }}'
+    affinity_type: host anti-affinity
+    api_key: "{{ exoscale__api_key }}"
+    api_secret: "{{ exoscale__api_secret }}"
+    api_url: "{{ exoscale__api_endpoint }}"
+  run_once: true
+  with_items: "{{ exoscale__affinity_groups }}"
+  loop_control:
+    label: "{{ affinity_group.name }}"
+    loop_var: affinity_group
+
+- name: Add SSH public keys
+  ngine_io.cloudstack.cs_sshkeypair:
+    name: "{{ item.name }}"
+    public_key: "{{ item.pubkey }}"
+    api_key: "{{ exoscale__api_key }}"
+    api_secret: "{{ exoscale__api_secret }}"
+    api_url: "{{ exoscale__api_endpoint }}"
+  run_once: true
+  with_items: "{{ exoscale__ssh_keys }}"
+
+- name: Deploy servers
+  ngine_io.cloudstack.cs_instance:
+    name: "{{ exoscale__server_name }}"
+    template: "{{ exoscale__server_template }}"
+    service_offering: "{{ exoscale__server_service_offering }}"
+    networks: "{{ exoscale__server_networks }}"
+    ip_to_networks: "{{ exoscale__server_ip_to_networks }}"
+    root_disk_size: "{{ exoscale__server_root_disk_size }}"
+    security_groups: "{{ exoscale__server_security_groups }}"
+    affinity_groups: "{{ exoscale__server_affinity_groups }}"
+    ssh_key: "{{ exoscale__server_ssh_key }}"
+    user_data: "{{ exoscale__server_user_data }}"
+    force: "{{ exoscale__server_allow_reboot }}"
+    zone: "{{ exoscale__zone }}"
+    state: "{{ exoscale__server_state }}"
+    api_key: "{{ exoscale__api_key }}"
+    api_secret: "{{ exoscale__api_secret }}"
+    api_url: "{{ exoscale__api_endpoint }}"
+  register: _exoscale__server_created
+
+- name: Show server infos
+  when: _exoscale__server_created.display_name is defined
+  block:
+    - name: Show server infos
+      debug:
+        msg: "VM {{ _exoscale__server_created.display_name }} {{ _exoscale__server_created.default_ip }}"
+
+    - name: Assing default IP to ansible_host
+      set_fact:
+        ansible_host: "{{ _exoscale__server_created.default_ip }}"
