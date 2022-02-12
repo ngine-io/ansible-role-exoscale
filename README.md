@@ -7,15 +7,15 @@ Manages compute resources on [Exoscale Cloud](https://www.exoscale.com/).
 ## Role Variables
 
 ```yaml
-# API
+# API to be used
 exoscale__api_key:
 exoscale__api_secret:
 exoscale__api_endpoint: https://api.exoscale.ch/v1
 
-# Zone
+# Zone to be used
 exoscale__zone: ch-dk-2
 
-# Security groups
+# Security groups to be created
 exoscale__security_groups:
   - name: default
     rules:
@@ -25,25 +25,25 @@ exoscale__security_groups:
         start_port: 22
         end_port: 22
 
-# Affinity groups (default [])
+# Affinity groups to be created (default [])
 exoscale__affinity_groups:
-  - my cluster group
+  - name: my cluster group
 
-# Networks (default [])
+# Networks to be created (default [])
 exoscale__networks:
   - name: private-network
     start_ip: 10.23.12.100
     end_ip: 10.23.12.150
     netmask: 255.255.255.0
 
-# SSH Keys
+# SSH Keys to be uploaded
 exoscale__ssh_key_default_name: "{{ lookup('env', 'USER') }}@{{ lookup('pipe', 'hostname') }}"
 exoscale__ssh_key_default_pubkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 exoscale__ssh_keys:
   - name: "{{ exoscale__ssh_key_default_name }}"
     pubkey: "{{ exoscale__ssh_key_default_pubkey }}"
 
-# Instances / Servers
+# Server instance
 exoscale__server_name: "{{ inventory_hostname_short }}"
 exoscale__server_template: "Rocky Linux 8 (Green Obsidian) 64-bit 2021-08-25-13bb54"
 exoscale__server_service_offering: Small
@@ -100,7 +100,7 @@ A typical playbook would look like this.
 
 ### Common Configurations
 
-Typical common configs for additional security groups and rules, affinity groups and networks:
+Typical common configs in a top level group (e.g. `group_vars/all.yml`) for additional security groups and rules, affinity groups and networks:
 
 ```yaml
 # file: group_vars/all.yml
@@ -171,7 +171,7 @@ cassandra2.example.com
 cassandra3.example.com
 ```
 
-Proxy should use a different offering and the additional security group proxy:
+Ensure all proxy instances use a different offering and the additional security group proxy:
 
 ```yaml
 #file: group_vars/proxy.yml
