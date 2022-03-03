@@ -40,5 +40,7 @@ exoscale__server_user_data: |
   manage_etc_hosts: false
   fqdn: "{{ inventory_hostname }}"
 
+exoscale__server_ipv6_enabled: false
+
 exoscale__server_state: present
 exoscale__server_allow_reboot: false

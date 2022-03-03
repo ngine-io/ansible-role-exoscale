@@ -57,6 +57,8 @@
     affinity_groups: "{{ exoscale__server_affinity_groups }}"
     ssh_key: "{{ exoscale__server_ssh_key }}"
     user_data: "{{ exoscale__server_user_data }}"
+    details:
+      ip6: "{{ exoscale__server_ipv6_enabled }}"
     force: "{{ exoscale__server_allow_reboot }}"
     zone: "{{ exoscale__zone }}"
     state: "{{ exoscale__server_state }}"

@@ -116,6 +116,9 @@ exoscale__zone: ch-gva-2
 ansible_user: rockylinux
 exoscale__server_template: "Rocky Linux 8 (Green Obsidian) 64-bit 2021-08-25-13bb54"
 
+# Enable IPv6
+exoscale__server_ipv6_enabled: true
+
 # Security groups: create these secrurity groups.
 # NOTE: Existing security groups with different names won't be touched.
 # NOTE: Additional existing rules in the groups below won't be touched.
