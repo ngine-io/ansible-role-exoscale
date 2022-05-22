@@ -1,16 +1,14 @@
 ---
 name: Release
-'on':
-  push:
-    tags:
-      - 'v*'
+"on":
+  release:
+    types: [created]
 
 defaults:
   run:
-    working-directory: 'ngine_io.exoscale_compute'
+    working-directory: "ngine_io.exoscale_compute"
 
 jobs:
-
   release:
     name: Release
     runs-on: ubuntu-latest
@@ -18,12 +16,12 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v3
         with:
-          path: 'ngine_io.exoscale_compute'
+          path: "ngine_io.exoscale_compute"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install Ansible.
         run: pip3 install ansible-core
