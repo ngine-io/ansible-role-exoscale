@@ -24,7 +24,7 @@
 
 - name: Configure affinity groups
   ngine_io.cloudstack.cs_affinitygroup:
-    name: '{{ affinity_group.name }}'
+    name: "{{ affinity_group.name }}"
     affinity_type: host anti-affinity
     api_key: "{{ exoscale__api_key }}"
     api_secret: "{{ exoscale__api_secret }}"
@@ -71,9 +71,9 @@
   when: _exoscale__server_created.display_name is defined
   block:
     - name: Show server infos
-      debug:
+      ansible.builtin.debug:
         msg: "VM {{ _exoscale__server_created.display_name }} {{ _exoscale__server_created.default_ip }}"
 
     - name: Assing default IP to ansible_host
-      set_fact:
+      ansible.builtin.set_fact:
         ansible_host: "{{ _exoscale__server_created.default_ip }}"
