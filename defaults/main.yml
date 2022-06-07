@@ -26,9 +26,9 @@ exoscale__ssh_keys:
 
 exoscale__server_name: "{{ inventory_hostname_short }}"
 
-exoscale__server_template: "Rocky Linux 8 (Green Obsidian) 64-bit 2021-08-25-13bb54"
+exoscale__server_template: "Rocky Linux 8 (Green Obsidian) 64-bit"
 exoscale__server_service_offering: Small
-exoscale__server_root_disk_size: 50
+exoscale__server_root_disk_size: 10
 exoscale__server_networks: "{{ omit }}"
 exoscale__server_ip_to_networks: "{{ omit }}"
 exoscale__server_security_groups:
