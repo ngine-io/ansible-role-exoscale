@@ -1,5 +1,8 @@
 # Ansible Role: Exoscale Compute
 
+:warning: **DEPRECATED:** Exoscale will no longer support the Cloudstack API after May 1, 2024.
+[See Announcement](https://changelog.exoscale.com/en/deprecation-api-v1-as-of-may-1st-2024-uVYHUVZ3).
+
 [![CI](https://github.com/ngine-io/ansible-role-exoscale/workflows/CI/badge.svg?event=push)](https://github.com/ngine-io/ansible-role-exoscale/actions?query=workflow%3ACI)
 
 Manages compute resources on [Exoscale Cloud](https://www.exoscale.com/).
